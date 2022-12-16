@@ -1,11 +1,11 @@
-import java.util.Scanner;
+import java.util.Scanner;//ginagamit for user input.
+//private, protected, default, public
 public class Main {
 
     // items is a type of array that stores elements of strings, static is used because the main method is a static type
     // to prevent creating this class object to access these attributes
     static String items[] = {"Winter Melon", "Taro", "Matcha"}; //items is a type of string array that stores list of elements of items in the store
     static int itemPrice[] = {50, 60, 70}; //itemPrice  is a type of integer array that stores the prices of each item in the store
-
     static String addOns[] = {"Nata", "Pearls", "Coffe Jelly"}; //items is a type of string array that stores list of elements of addons in the store
     static Scanner scanner = new Scanner(System.in); //Scanner is a type of class that is used for creating input and output streams in the project
     // this class is used to get the user input in the console.
@@ -16,26 +16,26 @@ public class Main {
         //Method that is used to start the app.
         // this is used to make the main method not cluttered with code and provide code reusability in the project.
 
-
         /*
-        * The run program function is the lifetime of the program all the functions and statements are encapsulated
-        * in this function to performed tasks of the project, such as printing the ouput to the screen, requesting input
-        * for the user and calculate the total prices of selected items in the program.
-        *
-        * */
-
+         * The run program function is the lifetime of the program all the functions and statements are encapsulated
+         * in this function to performed tasks of the project, such as printing the ouput to the screen, requesting input
+         * for the user and calculate the total prices of selected items in the program.
+         *
+         * */
         runProgram();
-        //after the execution of the program, the println statement below indicated the end of the program and the end of the execution of the main method.
+        //after the execution of the run program method, the println statement below indicated the end of the program
+        // and the end of the execution of the main method.
         System.out.println("Thank you for ordering");
 
     }
+
     static void runProgram() {
 
         /*
-        * Multi-line comments
-        *  the declaration statements below are used to be a placeo rder of each user input requesting in the system
-        *
-        * */
+         * Multi-line comments
+         *  the declaration statements below are used to be a placeorder of each user input requesting in the system
+         *
+         * */
 
         //Declaration Statement
         char item_choice, size_choice;
@@ -43,10 +43,11 @@ public class Main {
         int item_quantity;
         double price = 0, totalPrice = 0;
 
-        /*Control loop statement
-            while is a type of loop control that will execute the program again and again after the condition is false.
-            the true in the argument of the parenthesis of while indicated that this loop control will infinitely
-            loop on the program except when it encounters a break keyword which will break the while and exiting the loop.
+        /*
+            Control loop statement
+                 while is a type of loop control that will execute the program again and again after the condition is false.
+                 the true in the argument of the parenthesis of while indicated that this loop control will infinitely
+                 loop on the program except when it encounters a break keyword which will break the while and exiting the loop.
          */
         while (true) {
 
@@ -66,18 +67,18 @@ public class Main {
 
                 for (int i = 0; i < items.length; i++) {
                     System.out.printf("|    %c    | %-12s | ", items[i].toUpperCase().charAt(0), items[i]);
-                    for (int j = 0; j <  itemPrice.length; j++) {
+                    for (int j = 0; j < itemPrice.length; j++) {
                         //Same as the items but the iteration is the prices of the items accessed from the itemPrice array
                         System.out.printf("  %d  |", itemPrice[j]);
                     }
                     System.out.println();
                 }
-                System.out.print("Enter your choice[W/T/M]: ");
+                System.out.print("Enter your choice[W/T/M] (Enter Q to quit): ");
                 /*
-                * the scanner.next() are used to get the word or the input of the user,
-                * then after the scanner gets the input, the input will be converted to uppercase
-                * then returning the character of index 0 means getting the first character in the word.
-                * */
+                 * the scanner.next() are used to get the word or the input of the user,
+                 * then after the scanner gets the input, the input will be converted to uppercase
+                 * then returning the character of index 0 means getting the first character in the word.
+                 * */
                 item_choice = scanner.next().toUpperCase().charAt(0);
                 // the three conditions in this statement is to check whether the item choice value is equal
                 // to the first character of the items.
@@ -85,6 +86,8 @@ public class Main {
 
                 if(item_choice == 'W' || item_choice == 'T' || item_choice == 'M')
                     break;// this break keyword will break the while(true) in line 54
+                    if(item_choice == 'Q')
+                        return;//halting the execution of this function.
                 else{
 
                     System.out.println("Invalid Choice try again.");
@@ -120,11 +123,11 @@ public class Main {
                     while (true){
 
                         /*
-                        * This is called try catch block, this is used to include the codes that can produce an error on
-                        * the runtime of the program, such as user entering a letter to a number. This help the program
-                        * to catch any errors or notify the user if the user entered the wrong input and prevent the program
-                        * to crash whenever an error happens
-                        * */
+                         * This is called try catch block, this is used to include the codes that can produce an error on
+                         * the runtime of the program, such as user entering a letter to a number. This help the program
+                         * to catch any errors or notify the user if the user entered the wrong input and prevent the program
+                         * to crash whenever an error happens
+                         * */
                         try {
 
                             //this scanner.nextLine() are used to catch the end of line of entering the keyboard
@@ -133,10 +136,14 @@ public class Main {
                             scanner.nextLine();
                             System.out.print("Enter Quantity: ");
                             item_quantity = scanner.nextInt(); // this can produce an error if the user is dumb to enter a letter instead of a number.
-                            totalPrice += price * item_quantity;
-                            break;
+                            if(item_quantity<=0){
+                                System.out.println("Invalid Quantity try again.");
+                            }else {
+                                totalPrice += price * item_quantity;
+                                break;
+                            }
 
-                        }catch(Exception e){
+                        }catch(Exception ignore){
                             // if any error is found on the running of statements inside of try block this block will execute and execute all the statements inside of the exception block
                             System.out.println("Invalid input.");
                         }
@@ -155,7 +162,6 @@ public class Main {
                 choice = scanner.next().toUpperCase().charAt(0);
 
                 if(choice != 'Y' && choice != 'N'){
-                    System.out.println(choice);
                     System.out.println("Invalid Choice try again.");
                 }
             }while(choice != 'Y' && choice != 'N');
