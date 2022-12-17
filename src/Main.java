@@ -10,7 +10,10 @@ public class Main {
     static Scanner scanner = new Scanner(System.in); //Scanner is a type of class that is used for creating input and output streams in the project
     // this class is used to get the user input in the console.
     static int addOnPrices[] = {10, 15, 20};//itemPrice is a type of integer array that stores the prices of each addons in the store
+    static String[] selectedItems = new String[100];
 
+    static int index = 0, lastIndex = -1;
+    static double totalPrice = 0, selectedItemPrice = 0, selectedAddOnPrice;
     public static void main(String[] args) { // Entry point of the program
 
         //Method that is used to start the app.
@@ -25,35 +28,17 @@ public class Main {
         runProgram();
         //after the execution of the run program method, the println statement below indicated the end of the program
         // and the end of the execution of the main method.
+
+        System.out.println("Your items and their total:");
+        showCart();
+        System.out.println("Total Price: " + totalPrice);
         System.out.println("Thank you for ordering");
+
+        scanner.close();
 
     }
 
-    static void runProgram() {
-
-        /*
-         * Multi-line comments
-         *  the declaration statements below are used to be a placeorder of each user input requesting in the system
-         *
-         * */
-
-        //Declaration Statement
-        char item_choice, size_choice;
-        char addOnChoice;
-        int item_quantity;
-        double price = 0, totalPrice = 0;
-
-        /*
-            Control loop statement
-                 while is a type of loop control that will execute the program again and again after the condition is false.
-                 the true in the argument of the parenthesis of while indicated that this loop control will infinitely
-                 loop on the program except when it encounters a break keyword which will break the while and exiting the loop.
-         */
-        while (true) {
-
-            while(true){
-                //Printing statements
-                System.out.println("        Welcome to the Bubble Tea Shop!");
+    static void showItems() {
                 System.out.println("+==============================================+");
                 System.out.println("|  ITEMS  |    FLAVOR     | S    |   M  |  L   |");
                 System.out.println("+=============================================+");
@@ -73,6 +58,64 @@ public class Main {
                     }
                     System.out.println();
                 }
+    }
+
+    static void showAddOns(){
+            System.out.println("                  Add Ons                      ");
+            System.out.println("+=============================================+");
+            System.out.println("|  ITEMS  |       FLAVOR       | S  | M   | L |");
+            System.out.println("+=============================================+");
+            for (int i = 0; i < addOns.length; i++) {
+                System.out.printf("|    %c    | %-18s | %d | %d | %d |\n", addOns[i].toUpperCase().charAt(0), addOns[i], addOnPrices[i], addOnPrices[i], addOnPrices[i]);
+            }
+    }
+
+    static void showCart(){
+        boolean hasItem = false;
+        for (int i = 0; i < selectedItems.length; i++) {
+            if (selectedItems[i] != null) {
+                hasItem = true;
+                break;
+            }
+        }
+        if(!hasItem){
+            System.out.println("No items in the cart");
+            return;
+        }
+
+       for (int i = 0; i < selectedItems.length; i++) {
+            if (selectedItems[i] != null) {
+                System.out.println(selectedItems[i]);
+            }
+        }
+        System.out.println("Total Price of all items: " + totalPrice);
+    }
+
+    static void makeOrder(){
+
+        /*
+         * Multi-line comments
+         *  the declaration statements below are used to be a placeorder of each user input requesting in the system
+         *
+         * */
+
+        //Declaration Statement
+        char item_choice, size_choice;
+        char addOnChoice;
+        int item_quantity;
+        double price = 0;
+
+        /*
+            Control loop statement
+                 while is a type of loop control that will execute the program again and again after the condition is false.
+                 the true in the argument of the parenthesis of while indicated that this loop control will infinitely
+                 loop on the program except when it encounters a break keyword which will break the while and exiting the loop.
+         */
+        while (true) {
+
+            while(true){
+                //Printing statements
+                showItems();
                 System.out.print("Enter your choice[W/T/M] (Enter Q to quit): ");
                 /*
                  * the scanner.next() are used to get the word or the input of the user,
@@ -84,8 +127,21 @@ public class Main {
                 // to the first character of the items.
                 // the || symbol is an OR operator that will check
 
-                if(item_choice == 'W' || item_choice == 'T' || item_choice == 'M')
+                if(item_choice == 'W' || item_choice == 'T' || item_choice == 'M'){
+
+                    switch (item_choice){
+                        case 'W':
+                            selectedItems[index] = "Item Name: "+ items[0];
+                            break;
+                        case 'T':
+                            selectedItems[index] = "Item Name: "+items[1];
+                            break;
+                        case 'M':
+                            selectedItems[index] = "Item Name: "+ items[2];
+                            break;
+                    }
                     break;// this break keyword will break the while(true) in line 54
+                }
                     if(item_choice == 'Q')
                         return;//halting the execution of this function.
                 else{
@@ -110,12 +166,15 @@ public class Main {
                     switch (size_choice) {
                         case 'S':
                             price = itemPrice[0];
+                            selectedItems[index] += "\nItem Price: "+ itemPrice[0];
                             break;
                         case 'M':
                             price = itemPrice[1];
+                            selectedItems[index] += "\nItem Price: "+ itemPrice[1];
                             break;
                         case 'L':
                             price = itemPrice[2];
+                            selectedItems[index] += "\nItem Price: "+ itemPrice[2];
                             break;
                     }
 
@@ -140,6 +199,9 @@ public class Main {
                                 System.out.println("Invalid Quantity try again.");
                             }else {
                                 totalPrice += price * item_quantity;
+                                selectedItems[index] += "\nItem Quantity: "+ item_quantity;
+                                selectedItemPrice = price * item_quantity;
+                                selectedItems[index] += "\nTotal Price of this item: "+ selectedItemPrice;
                                 break;
                             }
 
@@ -148,14 +210,13 @@ public class Main {
                             System.out.println("Invalid input.");
                         }
 
-
                     }
                     break; // this keyword will break the while loop on line 96
                 }else {
                     System.out.println("Invalid Size try again.");
                 }
             }
-            System.out.println("Total Price " + totalPrice);
+            System.out.println("Total Price " + selectedItemPrice);
             char choice;// this variable is used to store the user input whether they want a addons or not
             do {
                 System.out.print("Would you like some add ons> [Y/N]: ");
@@ -170,13 +231,7 @@ public class Main {
             if(choice == 'Y'){
 
                 while (true) {
-                    System.out.println("                  Add Ons                      ");
-                    System.out.println("+=============================================+");
-                    System.out.println("|  ITEMS  |       FLAVOR       | S  | M   | L |");
-                    System.out.println("+=============================================+");
-                    for (int i = 0; i < addOns.length; i++) {
-                        System.out.printf("|    %c    | %-18s | %d | %d | %d |\n", addOns[i].toUpperCase().charAt(0), addOns[i], addOnPrices[i], addOnPrices[i], addOnPrices[i]);
-                    }
+                    showAddOns();
                     System.out.print("Enter your choice[N/P/C]: ");
                     addOnChoice = scanner.next().toUpperCase().charAt(0);
 
@@ -187,30 +242,187 @@ public class Main {
                         switch (addOnChoice) {
                             case 'N':
                                 totalPrice += addOnPrices[0];
+                                selectedItems[index] += "\nAdd On: "+ addOns[0];
+                                selectedItemPrice += addOnPrices[0];
                                 break;
                             case 'P':
                                 totalPrice += addOnPrices[1];
+                                selectedItems[index] += "\nAdd On: "+ addOns[1];
+                                selectedItemPrice += addOnPrices[1];
                                 break;
                             case 'C':
                                 totalPrice += addOnPrices[2];
+                                selectedItems[index] += "\nAdd On: "+ addOns[2];
+                                selectedItemPrice += addOnPrices[2];
                                 break;
                         }
 
+                        selectedItems[index] += "\nTotal Price: " + selectedItemPrice+"\n\n\n";
                         break;
                     }
 
                 }
 
-            } // if not then just print the total price
-            System.out.println("Total Price " + totalPrice);
+            }
+
             // the next statements are used to ask the user if she/he wants to add more items
-            System.out.print("Do you want to try again? [Y/N]: ");
-            if (scanner.next().toUpperCase().charAt(0) == 'N') {
-                break;//this break will break the first while loop and exiting the program
+            if(lastIndex > -1){
+                System.out.println("Item Updated.");
+                break;
+            }else {
+
+                System.out.print("Do you want to try again? [Y/N]: ");
+                if (scanner.next().toUpperCase().charAt(0) == 'N') {
+                    index++;
+                    break;//this break will break the first while loop and exiting the program
+                }
+            index++;
+
             }
 
         }
-        scanner.close();
+    }
+
+    static void updateItems(){
+
+        boolean hasItem = false;
+        for (int i = 0; i < selectedItems.length; i++) {
+            if(selectedItems[i] != null){
+                hasItem = true;
+                break;
+            }
+        }
+        if(!hasItem){
+
+            System.out.println("No items to update.");
+            return;
+        }
+        int number = 1;
+        try {
+
+            while(true){
+
+                for (int i=0; i< selectedItems.length; i++){
+                    if(selectedItems[i] != null){
+                     System.out.printf("Item no: [%d]:\n %s \n\n", number, selectedItems[i]);
+                     number++;
+                    }
+                }
+                System.out.println("Please Enter the order number: ");
+                int orderNumber = scanner.nextInt();
+                orderNumber--;
+                if(orderNumber < 0 || orderNumber > selectedItems.length) {
+                    System.out.println("Invalid Order Number");
+                }else {
+                    if(selectedItems[orderNumber] == null) {
+                        System.out.println("Order Number is empty");
+                        number = 0;
+                    }else {
+                        lastIndex = index;
+                        index = orderNumber;
+                        String totalPriceString = selectedItems[orderNumber].substring(selectedItems[orderNumber].lastIndexOf("item: ")+6).trim();//getting the price of the item
+                        totalPrice -= Double.parseDouble(totalPriceString);
+                        makeOrder();
+                        index = lastIndex;
+                        lastIndex = -1;
+                        break;
+                    }
+                }
+            }
+        }catch (Exception e){
+            System.out.println("Invalid input try again.");
+        }
+
+    }
+
+    static void deleteItem(){
+
+        boolean hasItem = false;
+        for (int i = 0; i < selectedItems.length; i++) {
+            if(selectedItems[i] != null){
+                hasItem = true;
+                break;
+            }
+        }
+        if(!hasItem){
+
+            System.out.println("No items to delete.");
+            return;
+        }
+        while (true){
+
+            try {
+
+                int number = 1;
+                for (int i=0; i< selectedItems.length; i++){
+                    if(selectedItems[i] != null){
+                        System.out.printf("Item no: [%d]:\n %s \n\n", number, selectedItems[i]);
+                        number++;
+                    }
+                }
+                System.out.println("Please Enter the order number: ");
+                int orderNumber = scanner.nextInt();
+                orderNumber--;
+                if(orderNumber < 0 || orderNumber > selectedItems.length) {
+                    System.out.println("Invalid Order Number");
+                }else {
+                    if(selectedItems[orderNumber] == null) {
+                        System.out.println("Order Number is empty");
+                    }else {
+                        String totalPriceString = selectedItems[orderNumber].substring(selectedItems[orderNumber].lastIndexOf("item: ")+6).trim();
+                        double price = Double.parseDouble(totalPriceString);
+                        selectedItems[orderNumber] = null;
+                        totalPrice -= price;
+                        System.out.println("Item Deleted.");
+                        break;
+                    }
+                }
+            }catch (Exception e){
+                System.out.println("Invalid input try again.");
+            }
+        }
+
+    }
+    static void runProgram() {
+
+        while(true){
+
+            try {
+                System.out.println("Welcome to Bubble Tea Shop");
+                System.out.println("1. Make an Order");
+                System.out.println("2. Show Cart");
+                System.out.println("3. Update cart");
+                System.out.println("4. Delete Item to your cart");
+                System.out.println("5. Exit");
+                System.out.print("Enter your choice: ");
+                int choice = scanner.nextInt();
+                switch (choice) {
+                    case 1:
+                        makeOrder();
+                        break;
+                    case 2:
+                        showCart();
+                        break;
+                    case 3:
+                        updateItems();
+                        break;
+                    case 4:
+                        deleteItem();
+                        break;
+                    case 5:
+                        System.out.println("Thank you for using our program.");
+                        return;
+                    default:
+                        System.out.println("Invalid Choice");
+                        break;
+                }
+
+            }catch (Exception e){
+                System.out.println("Invalid input try again.");
+                scanner.nextLine();//There's a bug in scanner that needs to consume the nextline of a keyboard enter action
+            }
+
+        }
 
     }
 
