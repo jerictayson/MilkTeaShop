@@ -39,9 +39,9 @@ public class Main {
     }
 
     static void showItems() {
-                System.out.println("+==============================================+");
-                System.out.println("|  ITEMS  |    FLAVOR     | S    |   M  |  L   |");
-                System.out.println("+=============================================+");
+        System.out.println("+==============================================+");
+        System.out.println("|  ITEMS  |    FLAVOR     | S    |   M  |  L   |");
+        System.out.println("+=============================================+");
                 /*this for loop are used to iterate the items the i value will be used to access all the index of the items
                 arrays are always zero based index.
                 length returns the size of the array
@@ -50,24 +50,24 @@ public class Main {
                 items[2] -> Matcha
                 * */
 
-                for (int i = 0; i < items.length; i++) {
-                    System.out.printf("|    %c    | %-12s | ", items[i].toUpperCase().charAt(0), items[i]);
-                    for (int j = 0; j < itemPrice.length; j++) {
-                        //Same as the items but the iteration is the prices of the items accessed from the itemPrice array
-                        System.out.printf("  %d  |", itemPrice[j]);
-                    }
-                    System.out.println();
-                }
+        for (int i = 0; i < items.length; i++) {
+            System.out.printf("|    %c    | %-12s | ", items[i].toUpperCase().charAt(0), items[i]);
+            for (int j = 0; j < itemPrice.length; j++) {
+                //Same as the items but the iteration is the prices of the items accessed from the itemPrice array
+                System.out.printf("  %d  |", itemPrice[j]);
+            }
+            System.out.println();
+        }
     }
 
     static void showAddOns(){
-            System.out.println("                  Add Ons                      ");
-            System.out.println("+=============================================+");
-            System.out.println("|  ITEMS  |       FLAVOR       | S  | M   | L |");
-            System.out.println("+=============================================+");
-            for (int i = 0; i < addOns.length; i++) {
-                System.out.printf("|    %c    | %-18s | %d | %d | %d |\n", addOns[i].toUpperCase().charAt(0), addOns[i], addOnPrices[i], addOnPrices[i], addOnPrices[i]);
-            }
+        System.out.println("                  Add Ons                      ");
+        System.out.println("+=============================================+");
+        System.out.println("|  ITEMS  |       FLAVOR       | S  | M   | L |");
+        System.out.println("+=============================================+");
+        for (int i = 0; i < addOns.length; i++) {
+            System.out.printf("|    %c    | %-18s | %d | %d | %d |\n", addOns[i].toUpperCase().charAt(0), addOns[i], addOnPrices[i], addOnPrices[i], addOnPrices[i]);
+        }
     }
 
     static void showCart(){
@@ -83,7 +83,7 @@ public class Main {
             return;
         }
 
-       for (int i = 0; i < selectedItems.length; i++) {
+        for (int i = 0; i < selectedItems.length; i++) {
             if (selectedItems[i] != null) {
                 System.out.println(selectedItems[i]);
             }
@@ -142,8 +142,8 @@ public class Main {
                     }
                     break;// this break keyword will break the while(true) in line 54
                 }
-                    if(item_choice == 'Q')
-                        return;//halting the execution of this function.
+                if(item_choice == 'Q')
+                    return;//halting the execution of this function.
                 else{
 
                     System.out.println("Invalid Choice try again.");
@@ -276,7 +276,7 @@ public class Main {
                     index++;
                     break;//this break will break the first while loop and exiting the program
                 }
-            index++;
+                index++;
 
             }
 
@@ -297,6 +297,8 @@ public class Main {
             System.out.println("No items to update.");
             return;
         }
+
+        char input = '\0';//Null Character
         int number = 1;
         try {
 
@@ -304,12 +306,13 @@ public class Main {
 
                 for (int i=0; i< selectedItems.length; i++){
                     if(selectedItems[i] != null){
-                     System.out.printf("Item no: [%d]:\n %s \n\n", number, selectedItems[i]);
-                     number++;
+                        System.out.printf("Item no: [%d]:\n %s \n\n", number, selectedItems[i]);
+                        number++;
                     }
                 }
-                System.out.println("Please Enter the order number: ");
-                int orderNumber = scanner.nextInt();
+                System.out.println("Please Enter the order number [Enter Q to quit]: ");
+                input = scanner.next().toUpperCase().charAt(0);
+                int orderNumber = Integer.parseInt(input+"");
                 orderNumber--;
                 if(orderNumber < 0 || orderNumber > selectedItems.length) {
                     System.out.println("Invalid Order Number");
@@ -330,6 +333,9 @@ public class Main {
                 }
             }
         }catch (Exception e){
+            if (input == 'Q') {
+                return;
+            }
             System.out.println("Invalid input try again.");
         }
 
@@ -349,6 +355,8 @@ public class Main {
             System.out.println("No items to delete.");
             return;
         }
+
+        char input = '\0';//Null Character
         while (true){
 
             try {
@@ -360,8 +368,10 @@ public class Main {
                         number++;
                     }
                 }
-                System.out.println("Please Enter the order number: ");
-                int orderNumber = scanner.nextInt();
+                System.out.println("Please Enter the order number [Enter Q to quit]: ");
+
+                input = scanner.next().toUpperCase().charAt(0);
+                int orderNumber = Integer.parseInt(input+"");
                 orderNumber--;
                 if(orderNumber < 0 || orderNumber > selectedItems.length) {
                     System.out.println("Invalid Order Number");
@@ -373,12 +383,27 @@ public class Main {
                         double price = Double.parseDouble(totalPriceString);
                         selectedItems[orderNumber] = null;
                         totalPrice -= price;
+                        System.out.println("Sorting your items... please wait.");
+                        //sorting the null and not elements in the array
+                        for (int i = 0; i < selectedItems.length; i++) {
+                            for (int j = i+1; j < selectedItems.length; j++) {
+                                if(selectedItems[i] == null && selectedItems[j] != null){
+                                    String temp = selectedItems[i];
+                                    selectedItems[i] = selectedItems[j];
+                                    selectedItems[j] = temp;
+                                }
+                            }
+                        }
                         System.out.println("Item Deleted.");
                         break;
                     }
                 }
             }catch (Exception e){
-                System.out.println("Invalid input try again.");
+                if (input == 'Q') {
+                    return;
+                }else {
+                    System.out.println("Invalid input try again.");
+                }
             }
         }
 
